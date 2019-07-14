@@ -53,13 +53,33 @@ def add_deck_to_dict_of_decks(dict_of_decks, deck_name, deck):
 def save(dict_of_decks, filename):
     dict_of_decks = prep_dict_of_decks_for_json(dict_of_decks)
     with open(filename, "w") as f:
-        json.dump(dict_of_decks, f)
+        json.dump(dict_of_decks, f, indent=4)
 
 
 
 def load(filename):
-    with open(filename) as f:
-        dict_of_decks = json.load(f)
-        return unprep_dict_of_decks_for_json(dict_of_decks)
+    try:
+        with open(filename) as f:
+            dict_of_decks = json.load(f)
+    except FileNotFoundError:
+        dict_of_decks = {}
+    return unprep_dict_of_decks_for_json(dict_of_decks)
+	
 
-    
+# Command line functions
+def cli_add(filename, deck_name, position, card_contents):
+    # load
+    dict_of_decks = load(filename)
+
+    # add
+    card = Card(*card_contents)
+    deck = dict_of_decks[deck_name]
+    deck = add_card_to_deck(card, deck, position)
+    dict_of_decks[deck_name] = deck
+
+        # front = input("Front of card: ")  
+        # back = input(Back of card)
+    # Save
+    dict_of_decks.save(dict_of_decks, filename)
+
+ 
