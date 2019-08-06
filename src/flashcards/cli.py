@@ -1,7 +1,14 @@
 import click 
+import os
 from flashcards import flashcards_core
+# with io.open(os.path.expanduser('~/debugout'), 'wb') as f:
+# filename = os.path.expanduser("~/flashcard_data/flashcard_data")
+filename =   r"C:\Users\alex\programing\flashcards_project\src\flashcards\flashcards_data\flashcards.json"
+folderpath =  r"C:\Users\alex\programing\flashcards_project\src\flashcards\flashcards_data"
+if not os.path.exists(folderpath):
+    os.mkdir(folderpath)
 
-filename = r"C:\Users\alex\programing\flashcards_project\src\flashcards\flashcards.json"
+# filename =   r"C:\Users\alex\programing\flashcards_project\src\flashcards\flashcards.json"
 @click.group('flashcards')
 def cli():
     'Command-line flashcards.'
@@ -45,13 +52,14 @@ def cli_view_front(deck, front_back_side):
         click.echo(f"front: {first_card.back}")
     if front_back_side == "side":
         click.echo(f"front: {first_card.side}")
+    
 
 
 @cli.command("create_deck")
 @click.argument("deck")
 def cli_create_deck(deck):
     dict_of_decks = flashcards_core.load(filename)
-    # TODO: handle the case for the deck already exists
+    # TODO: handle the case where the deck already exists
     dict_of_decks[deck]=[]
     flashcards_core.save(dict_of_decks, filename)
 

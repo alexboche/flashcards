@@ -2,7 +2,7 @@
 import functools
 import pathlib
 import json
-
+import os
 
 class Card:
     def __init__(self, front, back=None, side=None):
@@ -52,6 +52,8 @@ def add_deck_to_dict_of_decks(dict_of_decks, deck_name, deck):
 
 def save(dict_of_decks, filename):
     dict_of_decks = prep_dict_of_decks_for_json(dict_of_decks)
+    if not os.path.exists(filename):
+        os.mkdir(filename)
     with open(filename, "w") as f:
         json.dump(dict_of_decks, f, indent=4)
 
