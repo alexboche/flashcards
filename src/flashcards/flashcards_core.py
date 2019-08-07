@@ -52,8 +52,10 @@ def add_deck_to_dict_of_decks(dict_of_decks, deck_name, deck):
 
 def save(dict_of_decks, filename):
     dict_of_decks = prep_dict_of_decks_for_json(dict_of_decks)
-    if not os.path.exists(filename):
-        os.mkdir(filename)
+    # basepath, _ = os.path.split(filename)
+    basepath = os.path.dirname(filename)
+    if not os.path.exists(basepath):
+        os.makedirs(basepath)
     with open(filename, "w") as f:
         json.dump(dict_of_decks, f, indent=4)
 
@@ -61,7 +63,7 @@ def save(dict_of_decks, filename):
 
 def load(filename):
     try:
-        with open(filename) as f:
+        with open(filename, 'r') as f:
             dict_of_decks = json.load(f)
     except FileNotFoundError:
         dict_of_decks = {}

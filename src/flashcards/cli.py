@@ -2,11 +2,25 @@ import click
 import os
 from flashcards import flashcards_core
 # with io.open(os.path.expanduser('~/debugout'), 'wb') as f:
-# filename = os.path.expanduser("~/flashcard_data/flashcard_data")
-filename =   r"C:\Users\alex\programing\flashcards_project\src\flashcards\flashcards_data\flashcards.json"
-folderpath =  r"C:\Users\alex\programing\flashcards_project\src\flashcards\flashcards_data"
-if not os.path.exists(folderpath):
-    os.mkdir(folderpath)
+
+# Approach using expanduser
+data_dir = "flashcards_data"
+filepath = os.path.expanduser(os.path.join("~", data_dir))
+print(filepath)
+f =   "flashcards.json"
+filename = os.path.join(filepath, f)
+print(filename)
+print(os.path.expanduser("~"))
+
+""" Approach relative to cli.py file location
+abspath = os.path.abspath(__file__)
+base = os.path.dirname(abspath)
+print(base)
+filepath = os.path.join(base, data_dir)
+print(filepath)
+filename = os.path.join(filepath, f)
+print(filename)"""
+# filepath, filename = os.path.split(filename)
 
 # filename =   r"C:\Users\alex\programing\flashcards_project\src\flashcards\flashcards.json"
 @click.group('flashcards')
