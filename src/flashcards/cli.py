@@ -28,7 +28,7 @@ def cli():
     'Command-line flashcards.'
 
 #@cli.command("add")
-#@click.option("--position", type=int)
+#@click.option("--position", type=int, default=-1)
 #@click.argument("deck_name")
 #@click.argument("front")
 #@click.argument("back")
@@ -106,8 +106,14 @@ if __name__ == "__main__":
             cli_view_front(current_deck, fbs)
         elif action == "move":
             pass
-        elif action == "create":
-            args = input("")
+        elif action == "create card":
+            front = input("front: ")
+            back = input("back: ")
+            # side
+            position = -1
+            # position = input("position: ")
+            cli_add(filename, current_deck, -1, front, back, side="" )
+            
         elif action == "exit":
             break
         elif action == "change deck":
