@@ -27,58 +27,32 @@ print(filename)"""
 def cli():
     'Command-line flashcards.'
 
-#@cli.command("add")
-#@click.option("--position", type=int, default=-1)
-#@click.argument("deck_name")
-#@click.argument("front")
-#@click.argument("back")
-#@click.argument("side", required=False)
-#@click.option("--filename", default=filename)
+@cli.command("add")
+@click.option("--position", type=int, default=-1)
+@click.argument("deck_name")
+@click.argument("front")
+@click.argument("back")
+@click.argument("side", required=False)
+@click.option("--filename", default=filename)
 def cli_add(filename, deck_name, position, front, back, side):
-    # load
-    dict_of_decks = flashcards_core.load(filename)
+    flashcards_core.build_card_and_add_to_deck(filename, deck_name, position, front, back, side)
 
-    # add
-    card = flashcards_core.Card(front, back, side)
-    deck = dict_of_decks[deck_name]
-    deck = flashcards_core.add_card_to_deck(card, deck, position)
-    dict_of_decks[deck_name] = deck
 
-        # front = input("Front of card: ")  
-        # back = input(Back of card)
-    # Save
-    flashcards_core.save(dict_of_decks, filename)
+@cli.command("view")
+@click.argument("deck")
+@click.argument("front_back_side", required=False)
+def cli_view_card(deck, front_back_side):
+    flashcards_core.view_card(deck, front_back_side)
 
-#@cli.command("view")
-#@click.argument("deck")
-#@click.argument("front_back_side", required=False)
-# there has got to be a better way to do this. 
-# You shouldn't need to reload the entire dict_of_decks 
-# just to see the back of the card once you've seen the front
-def cli_view_front(deck, front_back_side):
-    if deck == []:
-        print("the deck called %s is empty" %deck)
-        return
-    if front_back_side == None:
-        front_back_side = "front"
-    dict_of_decks = flashcards_core.load(filename)
-    first_card = dict_of_decks[deck][0]
-    if front_back_side == "front":
-        click.echo(f"front: {first_card.front}")
-    if front_back_side == "back":
-        click.echo(f"back: {first_card.back}")
-    if front_back_side == "side":
-        click.echo(f"side: {first_card.side}")
     
-
-
-#@cli.command("create_deck")
-#@click.argument("deck")
+@cli.command("create_deck")
+@click.argument("deck")
 def cli_create_deck(deck):
     dict_of_decks = flashcards_core.load(filename)
     # TODO: handle the case where the deck already exists
     dict_of_decks[deck]=[]
     flashcards_core.save(dict_of_decks, filename)
+    
 
 
 @cli.command("move_current_card")
@@ -95,7 +69,10 @@ def cli_move_current_card(current_deck, destination_deck, position, filename):
     flashcards_core.save(dict_of_decks, filename)
 
 
-if __name__ == "__main__":
+
+@cli.command('prompt')
+def cli_prompt():
+    """Prompt for input."""
     current_deck = input("What deck do you want to look at? \n ")
     while current_deck not in flashcards_core.load(filename) and current_deck != "":
         print(f"there is no deck named {current_deck}")
@@ -106,7 +83,7 @@ if __name__ == "__main__":
         action = input("What would you like to do? \n ")
         if action == "view":
             fbs = input("front, back or side? \n")
-            cli_view_front(current_deck, fbs)
+            view_card(current_deck, fbs)
         elif action == "move":
             pass
         elif action == "create card":
@@ -115,12 +92,12 @@ if __name__ == "__main__":
             # side
             position = -1
             # position = input("position: ")
-            cli_add(filename, current_deck, -1, front, back, side="" )
+            flashcards_core.add_new_card_to_deck(filename, current_deck, -1, front, back, side="")
             
         elif action == "exit":
             break
-        elif action == "change deck":
-            current_deck = input("What deck do you want to look at?")
+        # elif action == "change deck":
+        #     current_deck = input("What deck do you want to look at?")
 
 
 

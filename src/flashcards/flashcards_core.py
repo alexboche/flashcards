@@ -37,6 +37,21 @@ def unprep_dict_of_decks_for_json(dict_of_decks):
         dict_of_decks[deck_name] = deck
     return dict_of_decks
 
+def build_card_and_add_to_deck(filename, deck_name, position, front, back, side):
+        # load
+        dict_of_decks = load(filename)
+    
+        # add
+        card = Card(front, back, side)
+        deck = dict_of_decks[deck_name]
+        deck = add_card_to_deck(card, deck, position)
+        dict_of_decks[deck_name] = deck
+    
+            # front = input("Front of card: ")  
+            # back = input(Back of card)
+        # Save
+        save(dict_of_decks, filename)
+    
 def add_card_to_deck(card, deck, position_in_deck=None):
     deck = deck.copy()
     if position_in_deck == None:
@@ -68,22 +83,18 @@ def load(filename):
     except FileNotFoundError:
         dict_of_decks = {}
     return unprep_dict_of_decks_for_json(dict_of_decks)
-	
-
-# Command line functions
-def cli_add(filename, deck_name, position, card_contents):
-    # load
+    
+def view_card(deck, front_back_side):
+    if deck == []:
+        print("the deck called %s is empty" %deck)
+        return
+    if front_back_side == None:
+        front_back_side = "front"
     dict_of_decks = load(filename)
-
-    # add
-    card = Card(*card_contents)
-    deck = dict_of_decks[deck_name]
-    deck = add_card_to_deck(card, deck, position)
-    dict_of_decks[deck_name] = deck
-
-        # front = input("Front of card: ")  
-        # back = input(Back of card)
-    # Save
-    dict_of_decks.save(dict_of_decks, filename)
-
- 
+    first_card = dict_of_decks[deck][0]
+    if front_back_side == "front":
+        print(f"front: {first_card.front}")
+    if front_back_side == "back":
+        print(f"back: {first_card.back}")
+    if front_back_side == "side":
+        print(f"side: {first_card.side}")
