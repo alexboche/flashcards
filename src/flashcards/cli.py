@@ -97,6 +97,9 @@ def cli_move_current_card(current_deck, destination_deck, position, filename):
 
 if __name__ == "__main__":
     current_deck = input("What deck do you want to look at? \n ")
+    while current_deck not in flashcards_core.load(filename) and current_deck != "":
+        print(f"there is no deck named {current_deck}")
+        current_deck = input("What deck do you want to look at? \n ")
     if current_deck == "":
         current_deck = "math"
     while True:
