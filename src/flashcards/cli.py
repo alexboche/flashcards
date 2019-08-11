@@ -83,7 +83,7 @@ def cli_prompt():
         action = input("What would you like to do? \n ")
         if action == "view":
             fbs = input("front, back or side? \n")
-            view_card(current_deck, fbs)
+            flashcards_core.view_card(current_deck, fbs)
         elif action == "move":
             pass
         elif action == "create card":
