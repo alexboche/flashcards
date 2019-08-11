@@ -30,11 +30,15 @@ def cli():
 @cli.command("add")
 @click.option("--position", type=int, default=-1)
 @click.argument("deck_name")
-@click.argument("front")
-@click.argument("back")
+@click.argument("front", required=False)
+@click.argument("back", required=False)
 @click.argument("side", required=False)
 @click.option("--filename", default=filename)
 def cli_add(filename, deck_name, position, front, back, side):
+    if front == None:
+        front = input("front: ")
+    if back == None:
+        back = input("back: ")
     flashcards_core.build_card_and_add_to_deck(filename, deck_name, position, front, back, side)
 
 
