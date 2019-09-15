@@ -28,7 +28,7 @@ def cli():
     'Command-line flashcards.'
 
 @cli.command("add")
-@click.option("--position", type=int, default=-1)
+@click.option("--position", type=int, default=None)
 @click.argument("deck_name")
 @click.argument("front", required=False)
 @click.argument("back", required=False)
@@ -45,8 +45,9 @@ def cli_add(filename, deck_name, position, front, back, side):
 @cli.command("view")
 @click.argument("deck")
 @click.argument("front_back_side", required=False)
+# @click.option("--filename", default=filename)
 def cli_view_card(deck, front_back_side):
-    flashcards_core.view_card(deck, front_back_side)
+    flashcards_core.view_card(deck, front_back_side, filename)
 
     
 @cli.command("create_deck")
@@ -62,11 +63,13 @@ def cli_create_deck(deck):
 @cli.command("move_current_card")
 @click.argument("current_deck")
 @click.option("--destination_deck", required=False)
-@click.argument("position", type=int)
+@click.argument("position", type=int, required=False)
 @click.option("--filename", required=False, default=filename)
 def cli_move_current_card(current_deck, destination_deck, position, filename):  
     if destination_deck == None:
         destination_deck = current_deck
+    if position == None:
+        position = len(destination_deck)
     dict_of_decks = flashcards_core.load(filename)
     card = dict_of_decks[current_deck].pop(0)
     dict_of_decks[destination_deck].insert(position, card)
@@ -87,16 +90,17 @@ def cli_prompt():
         action = input("What would you like to do? \n ")
         if action == "view":
             fbs = input("front, back or side? \n")
-            flashcards_core.view_card(current_deck, fbs)
+            flashcards_core.view_card(current_deck, fbs, filename)
         elif action == "move":
             pass
         elif action == "create card":
             front = input("front: ")
             back = input("back: ")
+            card = flashcards_core.Card(front, back)
             # side
-            position = -1
+            # position = -1
             # position = input("position: ")
-            flashcards_core.add_new_card_to_deck(filename, current_deck, -1, front, back, side="")
+            flashcards_core.add_card_to_deck(card, current_deck)
             
         elif action == "exit":
             break

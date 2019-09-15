@@ -84,7 +84,7 @@ def load(filename):
         dict_of_decks = {}
     return unprep_dict_of_decks_for_json(dict_of_decks)
     
-def view_card(deck, front_back_side):
+def view_card(deck, front_back_side, filename):
     if deck == []:
         print("the deck called %s is empty" %deck)
         return
