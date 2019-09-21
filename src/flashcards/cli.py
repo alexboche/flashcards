@@ -54,7 +54,10 @@ def cli_view_card(deck, front_back_side):
 @click.argument("deck")
 def cli_create_deck(deck):
     dict_of_decks = flashcards_core.load(filename)
-    # TODO: handle the case where the deck already exists
+    
+    if deck in dict_of_decks.keys():
+        print("that deck already exists")
+        return
     dict_of_decks[deck]=[]
     flashcards_core.save(dict_of_decks, filename)
     
