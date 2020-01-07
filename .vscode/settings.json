@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "venv\\Scripts\\python.exe",
+    "python.pythonPath": "/Users/alex/.pyenv/versions/3.7.3/bin/python",
     "restructuredtext.confPath": "${workspaceFolder}\\env\\Lib\\site-packages\\django\\urls"
 }

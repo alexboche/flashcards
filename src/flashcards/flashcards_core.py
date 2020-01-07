@@ -4,6 +4,18 @@ import pathlib
 import json
 import os
 
+# copied from cli.py
+# Approach using expanduser
+# data_dir = "flashcards_data"
+data_dir = "Dropbox/Dropbox_synced/flashcards_data"
+filepath = os.path.expanduser(os.path.join("~", data_dir))
+print(filepath)
+f =   "flashcards.json"
+filename = os.path.join(filepath, f)
+print(filename)
+print(os.path.expanduser("~"))
+
+
 class Card:
     def __init__(self, front, back=None, side=None):
         self.front = front
@@ -98,3 +110,19 @@ def view_card(deck, front_back_side, filename):
         print(f"back: {first_card.back}")
     if front_back_side == "side":
         print(f"side: {first_card.side}")
+    
+    position=input("what position do you want (zero is first, -1 is last) \n")
+    if position=="": position=None
+    else: position=int(position)
+    move_current_card(deck, position)from
+
+
+def move_current_card(current_deck, position, filename=filename, destination_deck=None):  
+    if destination_deck == None:
+        destination_deck = current_deck
+    if position == None:
+        position = len(destination_deck)
+    dict_of_decks = load(filename)
+    card = dict_of_decks[current_deck].pop(0)
+    dict_of_decks[destination_deck].insert(position, card)
+    save(dict_of_decks, filename)

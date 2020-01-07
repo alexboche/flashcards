@@ -4,7 +4,8 @@ from flashcards import flashcards_core
 # with io.open(os.path.expanduser('~/debugout'), 'wb') as f:
 
 # Approach using expanduser
-data_dir = "flashcards_data"
+# data_dir = "flashcards_data"
+data_dir = "Dropbox/Dropbox_synced/flashcards_data"
 filepath = os.path.expanduser(os.path.join("~", data_dir))
 print(filepath)
 f =   "flashcards.json"
@@ -48,6 +49,10 @@ def cli_add(filename, deck_name, position, front, back, side):
 # @click.option("--filename", default=filename)
 def cli_view_card(deck, front_back_side):
     flashcards_core.view_card(deck, front_back_side, filename)
+    position=input("what position do you want (zero is first, -1 is last) \n")
+    if position=="": position=None
+    else: position=int(position)
+    flashcards_core.move_current_card(deck, position)
 
     
 @cli.command("create_deck")
@@ -68,15 +73,8 @@ def cli_create_deck(deck):
 @click.option("--destination_deck", required=False)
 @click.argument("position", type=int, required=False)
 @click.option("--filename", required=False, default=filename)
-def cli_move_current_card(current_deck, destination_deck, position, filename):  
-    if destination_deck == None:
-        destination_deck = current_deck
-    if position == None:
-        position = len(destination_deck)
-    dict_of_decks = flashcards_core.load(filename)
-    card = dict_of_decks[current_deck].pop(0)
-    dict_of_decks[destination_deck].insert(position, card)
-    flashcards_core.save(dict_of_decks, filename)
+def cli_move_current_card(current_deck, position, filename=filename, destination_deck=None):  
+    flashcards_core.move_current_card(current_deck, position, filename, destination_deck)
 
 
 
@@ -85,25 +83,38 @@ def cli_prompt():
     """Prompt for input."""
     current_deck = input("What deck do you want to look at? \n ")
     while current_deck not in flashcards_core.load(filename) and current_deck != "":
-        print(f"there is no deck named {current_deck}")
+        # print(f"there is no deck named {current_deck}")
         current_deck = input("What deck do you want to look at? \n ")
     if current_deck == "":
         current_deck = "math"
     while True:
         action = input("What would you like to do? \n ")
         if action == "view":
-            fbs = input("front, back or side? \n")
-            flashcards_core.view_card(current_deck, fbs, filename)
+            # fbs = input("front, back or side? \n")
+            flashcards_core.view_card(current_deck, "front", filename)
+            position=input("what position do you want (zero is first, -1 is last) \n")
+            if position=="": position=None
+            else: position=int(position)
+            flashcards_core.move_current_card(current_deck, position)
         elif action == "move":
-            pass
-        elif action == "create card":
+            position=input("what position do you want (zero is first, -1 is last) \n")
+            if position=="": position=None
+            else: position=int(position)
+            # print(position)
+            
+            flashcards_core.move_current_card(current_deck, position)
+            
+        elif action == "add" or "add card" or "create card":
             front = input("front: ")
             back = input("back: ")
-            card = flashcards_core.Card(front, back)
+            side = ""
+            # card = flashcards_core.Card(front, back)
             # side
-            # position = -1
-            # position = input("position: ")
-            flashcards_core.add_card_to_deck(card, current_deck)
+            
+            position = input("position: ")
+            if position == "": position = -1
+            position = int(position)
+            flashcards_core.build_card_and_add_to_deck(filename, current_deck, position, front, back, side)
             
         elif action == "exit":
             break
