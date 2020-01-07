@@ -114,7 +114,7 @@ def view_card(deck, front_back_side, filename):
     position=input("what position do you want (zero is first, -1 is last) \n")
     if position=="": position=None
     else: position=int(position)
-    move_current_card(deck, position)from
+    move_current_card(deck, position)
 
 
 def move_current_card(current_deck, position, filename=filename, destination_deck=None):  
